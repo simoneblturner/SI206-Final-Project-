@@ -18,7 +18,7 @@ for dictionary in data["countries_stat"]:
     country_names.append(dictionary['country_name'])
 print(country_names)
 
-conn = sqlite3.connect('Corona_Cases.db')
+conn = sqlite3.connect('Corona_Cases2.db')
 cur = conn.cursor()
 
 cur.execute(
@@ -31,7 +31,7 @@ cur.execute(
     """
     )
 
-for dictionary in data["countries_stat"]:
+for dictionary in data["countries_stat"][:20]:
     cur.execute(
         """
         INSERT INTO Cases(Country, Cases, Deaths)
@@ -39,4 +39,4 @@ for dictionary in data["countries_stat"]:
         """,
         (dictionary['country_name'], dictionary['cases'], dictionary['deaths']))
 
-conn.commit()
+conn.commit() 
