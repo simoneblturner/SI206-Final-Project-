@@ -30,10 +30,11 @@ cur.execute(
     """
 )
 
+index = 20
 
-for country in data:
+for country in data[:index]:
     try:
-    
+
         density = country["population"] / country["area"]
         cur.execute(
             """
@@ -41,6 +42,7 @@ for country in data:
             VALUES (?, ?, ?, ?)
             """,
             (country['name'], country['population'], country["area"], density))
+           
     except:
         continue 
 
