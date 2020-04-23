@@ -37,6 +37,8 @@ for country in country_names:
                 continue
     else:
         continue
+
+print(list_of_country_dicts)
         
 
 #conn = sqlite3.connect('Corona_Cases2.db')
@@ -48,15 +50,15 @@ for country in country_names:
 
 #index = 0
 
-for dictionary in data["countries_stat"]:
-    if index < 20:
-        cur.execute(
-            """
-            INSERT INTO Cases(Country, Cases, Deaths)
-            VALUES (?, ?, ?)
-            """,
-            (dictionary['country_name'], dictionary['cases'], dictionary['deaths']))
-    index += 1
+#for dictionary in data["countries_stat"]:
+   # if index < 20:
+        #cur.execute(
+           # """
+           # INSERT INTO Cases(Country, Cases, Deaths)
+          #  VALUES (?, ?, ?)
+         #   """,
+        #    (dictionary['country_name'], dictionary['cases'], dictionary['deaths']))
+  #  index += 1
 
-    conn.commit() 
-    continue
+   # conn.commit() 
+   # continue
