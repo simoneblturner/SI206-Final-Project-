@@ -5,10 +5,10 @@ import os
 import sqlite3
 import Pollution 
 
-pollution_countries = Pollution.country_list()
-print(pollution_countries)
-
 def country_list_population():
+    
+    pollution_countries = Pollution.country_list()
+
     country_list_population = []
     # requesting information on country by population from API
     url = "https://ajayakv-rest-countries-v1.p.rapidapi.com/rest/v1/all"
@@ -24,8 +24,6 @@ def country_list_population():
     data = response.json()
     for country in data:
         country_list_population.append(country["name"])
-
-    return country_list_population
 
     #creating population database 
     conn = sqlite3.connect('Popul-density.db')
@@ -68,5 +66,7 @@ def country_list_population():
 
     #commit table 
     conn.commit()
+    
+    return country_list_population
 
 population = country_list_population()
