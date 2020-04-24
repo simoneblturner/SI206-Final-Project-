@@ -18,34 +18,34 @@ def country_list_corona():
     return country_names
 
 
-""" 
-conn = sqlite3.connect('Corona_Cases2.db')
-cur = conn.cursor()
+#conn = sqlite3.connect('Corona_Cases2.db')
+#cur = conn.cursor()
 
 #Creating Corona Cases & Deaths Table
 #cur.execute("""CREATE TABLE IF NOT EXISTS Cases(Country PRIMARY KEY,Cases INTEGER,Deaths INTEGER)""")
 
-index = 0
-for dictionary in data["countries_stat"]:
-   if index < 20:
-        cur.execute(
-           """
-           INSERT INTO Cases(Country, Cases, Deaths)
-           VALUES (?, ?, ?)
-           """, 
-           (dictionary['country_name'], dictionary['cases'], dictionary['deaths']))
-    index += 1
+#index = 0
+#for dictionary in data["countries_stat"]:
+   #if index < 20:
+        #cur.execute(
+           #"""
+           #INSERT INTO Cases(Country, Cases, Deaths)
+           #VALUES (?, ?, ?)
+           #""", 
+           #(dictionary['country_name'], dictionary['cases'], dictionary['deaths']))
+    #index += 1
 
-    conn.commit() 
+    #conn.commit() 
 
 #Below we start filtering based on the countries that we all have in common
 
 #Pulling Grace's Data
-pollution_countries = Pollution.country_list()
+#pollution_countries = Pollution.country_list()
 
 #Pulling Simone's Data
 #Popul-by-Country.XX
 
+"""
 country_names = []
 for dictionary in data["countries_stat"]:
     country_names.append(dictionary['country_name'])
