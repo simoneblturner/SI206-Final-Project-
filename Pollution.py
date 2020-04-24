@@ -4,7 +4,7 @@ import re
 import os
 import sqlite3
 
-def country_list():
+def country_list_pollution():
     r = requests.get("https://www.numbeo.com/pollution/rankings_by_country.jsp?title=2020&displayColumn=0")
     soup = BeautifulSoup(r.text, "html.parser")
 
@@ -34,6 +34,7 @@ def country_list():
         Countrynames2019.append(country1)
     
     return Countrynames2019
+    country = country_list_pollution()
 
     Pollution2019 = []
     Pollution2 = soup.find_all("td", style = "text-align: right")
@@ -55,8 +56,8 @@ def country_list():
             tup2020.append(tup)
 
 
-#print(len(tup2020))
-#print(len(tup2019))
+    #print(len(tup2020))
+    #print(len(tup2019))
 
     tup2019 = sorted(tup2019)
     tup2020 = sorted(tup2020)
@@ -65,7 +66,7 @@ def country_list():
     cur = conn.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS countryid (id INTEGER PRIMARY KEY, country STRING)")
     for i in range(len(tup2019)):
-        cur.execute("INSERT INTO countryid (id,country) VALUES (?,?)",(i,tup2019[i][0]))
+        cur.execute("INSERT INTO countryid (id,country) VALUES (?)",(tup2019[i][0]))
     conn.commit()
     cur.execute('DROP TABLE IF EXISTS pollution2019')
     cur.execute('''CREATE TABLE pollution2019 (id INTEGER PRIMARY KEY, pollutionindex FLOAT) ''')
@@ -78,7 +79,6 @@ def country_list():
     for i in range(len(tup2020)):
         cur.execute("INSERT INTO pollution2020 (id,pollutionindex) VALUES (?,?)",(i,tup2020[i][1]))
     conn.commit()
-country = country_list()
 
 
 
