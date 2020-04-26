@@ -7,10 +7,14 @@ import sqlite3
 import Pollution
 import Population
 import Corona_Cases_Final
+import matplotlib
+import matplotlib.pyplot as plt
 
+# CREATE DATABASE
 conn = sqlite3.connect('COVID_Pollution_Correlation.db')
 cur = conn.cursor()
 
+# CREATE UNIVERSAL KEY FOR EVERY COUNTRY
 def create_database():
     
     pollution = Pollution.country_list_pollution()
@@ -20,9 +24,6 @@ def create_database():
     merged_list = population + pollution + corona
     all_countries = list(set(merged_list))
     all_countries = sorted(all_countries)
-
-    print(all_countries)
-    print(len(all_countries))
 
     cur.execute(
         """
@@ -44,8 +45,8 @@ def create_database():
         )
 
     conn.commit()
-    
-create_database()
+
+# CREATE POPULATION TABLE
 
 def population_data():
     url = "https://ajayakv-rest-countries-v1.p.rapidapi.com/rest/v1/all"
@@ -71,16 +72,15 @@ def population_data():
         )
         """
     )
-    #fetching only 20 coumtries data at a time 
+    
     index = 0
     
-    #inserting data into table
     for country in data:
         country_name = country["name"]
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (country_name,))
         name = cur.fetchone()[0]
         try:
-            if index < 20: 
+            if index < 150: 
                 density = country["population"] / country["area"]
                 cur.execute(
                     """
@@ -92,10 +92,9 @@ def population_data():
         except:
             continue 
 
-    #commit table 
     conn.commit()
 
-population_data()
+#CREATE POLLUTION TABLE 
 
 def pollution_data():
     r = requests.get("https://www.numbeo.com/pollution/rankings_by_country.jsp?title=2020&displayColumn=0")
@@ -158,7 +157,7 @@ def pollution_data():
         cur.execute("INSERT INTO pollution2020 (id, country, pollution_index) VALUES (?,?,?)",(name, i[0],i[1]))
     conn.commit()
 
-pollution_data()
+# CREATE COVID CASES TABLE
 
 def covid_case_data():
     url = "https://coronavirus-monitor-v2.p.rapidapi.com/coronavirus/cases_by_country.php"
@@ -184,4 +183,108 @@ def covid_case_data():
     
     conn.commit() 
 
+# JOIN CASES DATA AND POPULATION DENSITY DATA
+
+def cases_density():
+
+    print("\n Density vs Cases \n")
+
+    cur.execute(
+    '''
+    SELECT Country_ids.country_name, popul_density.density, Cases.cases 
+    FROM Cases 
+    INNER JOIN popul_density 
+    ON Cases.country_id = popul_density.country_id 
+    INNER JOIN Country_ids
+    ON Cases.country_id = Country_ids.country_id
+
+    '''
+    )
+    conn.commit()
+    all = cur.fetchall()
+
+    tups = []
+    for i in all: 
+        tups.append(i)
+
+    # Plot Density vs Cases
+    names = []
+    density = []
+    cases = []
+    print(tups)
+    for tup in tups:
+        names.append(tup[0])
+        density.append(tup[1])
+        stri = str(tup[2])
+        if "," in stri:
+            num = float(stri.replace(",", ""))
+            cases.append(num)
+        else:
+            cases.append(float(stri))
+   
+    plt.figure(1, figsize = (9,3))
+    plt.scatter(density, cases)
+    #plt.set_xlabel("Population Density")
+    #plt.set_ylabel("COVID-19 Cases")
+    #plt.set_title("Population Density by County vs COVID-19 Cases")
+    plt.savefig("DENSITY_CASES.png")
+    plt.show()
+
+# JOIN CASES DATA AND POLLUTION 2019 DATA
+
+def cases_2019():
+
+    print("\nCases vs Pollution 2019 \n")
+
+    cur.execute(
+    '''
+    SELECT Country_ids.country_name, Cases.cases, pollution2019.pollution_index 
+    FROM Cases 
+    INNER JOIN pollution2019 
+    ON Cases.country_id = pollution2019.id
+    INNER JOIN Country_ids
+    ON Cases.country_id = Country_ids.country_id
+
+    '''
+    )
+    conn.commit()
+    tups = []
+    all = cur.fetchall()
+    for i in all: 
+        tups.append(i)    
+
+
+
+# JOIN CASES DATA AND POLLUTION 2020 DATA
+
+def cases_2020():
+
+    print("\nCases vs Pollution 2020 \n")
+
+    cur.execute(
+    '''
+    SELECT Country_ids.country_name, Cases.cases, pollution2020.pollution_index 
+    FROM Cases 
+    INNER JOIN pollution2020 
+    ON Cases.country_id = pollution2020.id
+    INNER JOIN Country_ids
+    ON Cases.country_id = Country_ids.country_id
+
+    '''
+    )
+    conn.commit()
+    all = cur.fetchall()
+    for i in all: 
+        print(i)
+
+
+# RUN FUNCTIONS
+create_database()
+population_data()
+pollution_data()
 covid_case_data()
+
+cases_density()
+cases_2019()
+cases_2020()
+
