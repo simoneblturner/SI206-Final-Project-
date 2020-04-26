@@ -11,8 +11,12 @@ def country_list_corona():
     response = requests.request("GET", url, headers=headers)
     data = response.json()
 
+    print(data)
+
     country_names = []
     for dictionary in data["countries_stat"]:
         country_names.append(dictionary['country_name'])
 
     return country_names
+
+country_list_corona()
