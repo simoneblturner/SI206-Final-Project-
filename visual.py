@@ -146,7 +146,7 @@ def difference_density():
     round((pollution2019.pollution_index - pollution2020.pollution_index), 2)
     FROM popul_density 
     INNER JOIN pollution2019 
-    ON popul_density.country_id = popul_density.country_id 
+    ON popul_density.country_id = pollution2019.id 
     INNER JOIN pollution2020
     ON popul_density.country_id = pollution2020.id
     INNER JOIN Country_ids
@@ -163,10 +163,10 @@ def difference_density():
     
     difference = []
     density = []
-
+    
     for tup in tups:
-        difference.append(tup[1])
-        density.append(tup[4])
+        difference.append(tup[4])
+        density.append(tup[1])
 
     plt.figure(1, figsize = (9,3))
     fig, ax = plt.subplots()
