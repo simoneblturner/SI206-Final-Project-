@@ -10,7 +10,7 @@ import Corona_Cases_Final
 import matplotlib
 import matplotlib.pyplot as plt
 
-# CREATE DATABASE
+# CREATE POPULATION TABLE
 conn = sqlite3.connect('COVID_Pollution_Correlation.db')
 cur = conn.cursor()
 
@@ -28,26 +28,39 @@ def create_database():
     cur.execute(
         """
         CREATE TABLE IF NOT EXISTS Country_ids(
-            country_id INTEGER PRIMARY KEY,
-            country_name STRING NOT NULL
+            country_id INTEGER PRIMARY KEY UNIQUE,
+            country_name STRING NOT NULL UNIQUE
         )
         """
     )
-    i = 0 
-    for country in all_countries: 
+ 
+    cur.execute(
+        """ 
+        SELECT COUNT (*) FROM Country_ids
+        """
+        )
+    c = cur.fetchone()[0]
+    i = c
+    for country in all_countries[c:c+20]: 
         i += 1
-        cur.execute(
+        try:
+            cur.execute(
+            
             """
-            INSERT INTO Country_ids(country_id, country_name)
+            INSERT INTO Country_ids(country_id, country_name)  
             VALUES (?, ?)
             """,
             (i, country)
-        )
-
+            )
+            
+        except:
+            continue
+        
     conn.commit()
 
-# CREATE POPULATION TABLE
+create_database()
 
+# CREATE TABLE FOR POLLUTION DATA
 def population_data():
     url = "https://ajayakv-rest-countries-v1.p.rapidapi.com/rest/v1/all"
 
@@ -72,23 +85,27 @@ def population_data():
         )
         """
     )
-    
-    index = 0
-    
-    for country in data:
+    cur.execute(
+        """ 
+        SELECT COUNT (*) FROM popul_density
+        """
+    )
+
+    c = cur.fetchone()[0]
+
+    for country in data[c:c+20]:
         country_name = country["name"]
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (country_name,))
         name = cur.fetchone()[0]
         try:
-            if index < 150: 
-                density = country["population"] / country["area"]
-                cur.execute(
-                    """
-                    INSERT INTO popul_density(country_id, country_name, population, area, density)
-                    VALUES (?, ?, ?, ?, ?)
-                    """,
-                    (name, country_name, country['population'], country["area"], density))
-                index += 1 
+            density = country["population"] / country["area"]
+            cur.execute(
+                """
+                INSERT INTO popul_density(country_id, country_name, population, area, density)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (name, country_name, country['population'], country["area"], density))
+             
         except:
             continue 
 
@@ -144,14 +161,28 @@ def pollution_data():
     tup2020 = sorted(tup2020)
 
     cur.execute("CREATE TABLE IF NOT EXISTS pollution2019 (id INTEGER PRIMARY KEY, country STRING, pollution_index FLOAT)")
-    for i in tup2019:
+    cur.execute(
+        """ 
+        SELECT COUNT (*) FROM pollution2019
+        """
+    )
+    c = cur.fetchone()[0]
+    for i in tup2019[c:c+20]:
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (i[0],))
         name = cur.fetchone()[0]
         cur.execute("INSERT INTO pollution2019 (id,country, pollution_index) VALUES (?, ?, ?)",(name, i[0], i[1]))
     conn.commit()
 
     cur.execute("CREATE TABLE IF NOT EXISTS pollution2020 (id INTEGER PRIMARY KEY, country STRING, pollution_index FLOAT)")
-    for i in tup2020:
+    cur.execute(
+        """ 
+        SELECT COUNT (*) FROM pollution2020
+        """
+    )
+
+    con = cur.fetchone()[0]
+    
+    for i in tup2020[con:con+20]:
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (i[0],))
         name = cur.fetchone()[0]
         cur.execute("INSERT INTO pollution2020 (id, country, pollution_index) VALUES (?,?,?)",(name, i[0],i[1]))
@@ -169,8 +200,16 @@ def covid_case_data():
     data = response.json()
 
     cur.execute("""CREATE TABLE IF NOT EXISTS Cases(country_id PRIMARY KEY, country_name STRING, cases INTEGER, deaths INTEGER)""")
+    
+    cur.execute(
+        """ 
+        SELECT COUNT (*) FROM Cases
+        """
+    )
 
-    for country in data["countries_stat"]:
+    c = cur.fetchone()[0]
+
+    for country in data["countries_stat"][c:c+20]:
         country_name = country["country_name"]
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (country_name,))
         name = cur.fetchone()[0]
@@ -183,108 +222,36 @@ def covid_case_data():
     
     conn.commit() 
 
-# JOIN CASES DATA AND POPULATION DENSITY DATA
-
-def cases_density():
-
-    print("\n Density vs Cases \n")
-
-    cur.execute(
-    '''
-    SELECT Country_ids.country_name, popul_density.density, Cases.cases 
-    FROM Cases 
-    INNER JOIN popul_density 
-    ON Cases.country_id = popul_density.country_id 
-    INNER JOIN Country_ids
-    ON Cases.country_id = Country_ids.country_id
-
-    '''
+cur.execute(
+        """ 
+        SELECT COUNT (*) FROM Country_ids
+        """
     )
-    conn.commit()
-    all = cur.fetchall()
+one = cur.fetchone()[0]
 
-    tups = []
-    for i in all: 
-        tups.append(i)
-
-    # Plot Density vs Cases
-    names = []
-    density = []
-    cases = []
-    print(tups)
-    for tup in tups:
-        names.append(tup[0])
-        density.append(tup[1])
-        stri = str(tup[2])
-        if "," in stri:
-            num = float(stri.replace(",", ""))
-            cases.append(num)
-        else:
-            cases.append(float(stri))
-   
-    plt.figure(1, figsize = (9,3))
-    plt.scatter(density, cases)
-    #plt.set_xlabel("Population Density")
-    #plt.set_ylabel("COVID-19 Cases")
-    #plt.set_title("Population Density by County vs COVID-19 Cases")
-    plt.savefig("DENSITY_CASES.png")
-    plt.show()
-
-# JOIN CASES DATA AND POLLUTION 2019 DATA
-
-def cases_2019():
-
-    print("\nCases vs Pollution 2019 \n")
-
+if one == 281:
+    population_data()
     cur.execute(
-    '''
-    SELECT Country_ids.country_name, Cases.cases, pollution2019.pollution_index 
-    FROM Cases 
-    INNER JOIN pollution2019 
-    ON Cases.country_id = pollution2019.id
-    INNER JOIN Country_ids
-    ON Cases.country_id = Country_ids.country_id
+            """ 
+            SELECT COUNT (*) FROM popul_density
+            """
+        )
+    two = cur.fetchone()[0]
 
-    '''
-    )
-    conn.commit()
-    tups = []
-    all = cur.fetchall()
-    for i in all: 
-        tups.append(i)    
+    if two == 240:
+        pollution_data()
+        cur.execute(
+            """ 
+            SELECT COUNT (*) FROM pollution2019
+            """
+            )
+        three = cur.fetchone()[0]
 
-
-
-# JOIN CASES DATA AND POLLUTION 2020 DATA
-
-def cases_2020():
-
-    print("\nCases vs Pollution 2020 \n")
-
-    cur.execute(
-    '''
-    SELECT Country_ids.country_name, Cases.cases, pollution2020.pollution_index 
-    FROM Cases 
-    INNER JOIN pollution2020 
-    ON Cases.country_id = pollution2020.id
-    INNER JOIN Country_ids
-    ON Cases.country_id = Country_ids.country_id
-
-    '''
-    )
-    conn.commit()
-    all = cur.fetchall()
-    for i in all: 
-        print(i)
-
-
-# RUN FUNCTIONS
-create_database()
-population_data()
-pollution_data()
-covid_case_data()
-
-cases_density()
-cases_2019()
-cases_2020()
-
+        if three == 106:
+            covid_case_data()
+            cur.execute(
+                """ 
+                SELECT COUNT (*) FROM Cases
+                """
+                )
+            four = cur.fetchone()[0]
