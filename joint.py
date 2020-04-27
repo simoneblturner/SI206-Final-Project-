@@ -267,7 +267,9 @@ def covid_case_data():
         """, 
         (name, country['country_name'], country['cases'], country['deaths']))
     
-    conn.commit() 
+    conn.commit()
+
+create_database()
 
 # CHECK HOW MANY ROWS ARE IN Country_ids
 cur.execute(
