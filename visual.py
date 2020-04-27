@@ -89,9 +89,9 @@ def difference_in_pollution():
             stri = ""
             for word in tup:
                 word = str(word)
-                stri += word + " "
+                stri += word + ", "
 
-            output.write(str(stri) + "\n")
+            output.write(str(stri[:-2]) + "\n")
 
 # FUNCTION TO JOIN AND CREATE VISULIZATION FOR CASES AND DIFFERENCE IN POLLUTION BETWEEN 2019-2020
 def cases_difference():
@@ -188,8 +188,10 @@ def difference_density():
 def rate_cases_deaths():
     cur.execute(
     '''
-    SELECT Cases.country_name, Cases.cases, Cases.deaths
+    SELECT Country_ids.country_id, Country_ids.country_name, Cases.cases, Cases.deaths
     FROM Cases
+    INNER JOIN Country_ids
+    ON Country_ids.country_id = Cases.country_id
     '''
     )
     conn.commit()
@@ -207,9 +209,9 @@ def rate_cases_deaths():
     num_deaths = []
 
     for tup in tups:
-        countries.append(tup[0])
-        cases.append(tup[1])
-        deaths.append(tup[2])
+        countries.append(tup[1])
+        cases.append(tup[2])
+        deaths.append(tup[3])
     
     for case in cases:
         case = str(case)
