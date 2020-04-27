@@ -90,7 +90,6 @@ def population_data():
         """
         CREATE TABLE IF NOT EXISTS popul_density(
             country_id INTEGER PRIMARY KEY,
-            country_name STRING,
             population INTEGER,
             area FLOAT, 
             density FLOAT
@@ -119,10 +118,10 @@ def population_data():
             density = country["population"] / country["area"]
             cur.execute(
                 """
-                INSERT INTO popul_density(country_id, country_name, population, area, density)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO popul_density(country_id, population, area, density)
+                VALUES (?, ?, ?, ?)
                 """,
-                (name, country_name, country['population'], country["area"], density))
+                (name, country['population'], country["area"], density))
              
         except:
             continue 
@@ -187,7 +186,7 @@ def pollution_data():
     tup2020 = sorted(tup2020)
 
     # CREATE 2019 POLLUTION TABLE
-    cur.execute("CREATE TABLE IF NOT EXISTS pollution2019 (id INTEGER PRIMARY KEY, country STRING, pollution_index FLOAT)")
+    cur.execute("CREATE TABLE IF NOT EXISTS pollution2019 (id INTEGER PRIMARY KEY, pollution_index FLOAT)")
     
     # CHECK NUMBER OF ROWS IN POLLUTION 2019 TABLE
     cur.execute(
@@ -203,11 +202,11 @@ def pollution_data():
         # MATCH UNIVERSAL COUNTRY ID TO COUNTRY IN POLLUTION DATA 
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (i[0],))
         name = cur.fetchone()[0]
-        cur.execute("INSERT INTO pollution2019 (id,country, pollution_index) VALUES (?, ?, ?)",(name, i[0], i[1]))
+        cur.execute("INSERT INTO pollution2019 (id, pollution_index) VALUES (?, ?)",(name, i[1]))
     conn.commit()
 
     # CREATE TABLE FOR POLLUTION 2020 
-    cur.execute("CREATE TABLE IF NOT EXISTS pollution2020 (id INTEGER PRIMARY KEY, country STRING, pollution_index FLOAT)")
+    cur.execute("CREATE TABLE IF NOT EXISTS pollution2020 (id INTEGER PRIMARY KEY, pollution_index FLOAT)")
     
     # CHECK HOW MANY ROWS ARE IN pollution2020 
     cur.execute(
@@ -224,7 +223,7 @@ def pollution_data():
         # MATCH UNIVERSAL COUNTRY ID TO COUNTRY IN POLLUTION DATA 
         cur.execute("SELECT country_id FROM Country_ids WHERE country_name = ?", (i[0],))
         name = cur.fetchone()[0]
-        cur.execute("INSERT INTO pollution2020 (id, country, pollution_index) VALUES (?,?,?)",(name, i[0],i[1]))
+        cur.execute("INSERT INTO pollution2020 (id, pollution_index) VALUES (?,?)",(name,i[1]))
     conn.commit()
 
 # PART FIVE FUNCRION TO CREATE COVID CASES TABLE
@@ -242,7 +241,7 @@ def covid_case_data():
     data = response.json()
 
     # CREATE Cases TABLE 
-    cur.execute("""CREATE TABLE IF NOT EXISTS Cases(country_id PRIMARY KEY, country_name STRING, cases INTEGER, deaths INTEGER)""")
+    cur.execute("""CREATE TABLE IF NOT EXISTS Cases(country_id PRIMARY KEY, cases INTEGER, deaths INTEGER)""")
     
     # CHECK HOW MANY ROWS ARE IN Cases
     cur.execute(
@@ -262,10 +261,10 @@ def covid_case_data():
         name = cur.fetchone()[0]
         cur.execute(
         """
-        INSERT INTO Cases(country_id, country_name, cases, deaths)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO Cases(country_id, cases, deaths)
+        VALUES (?, ?, ?)
         """, 
-        (name, country['country_name'], country['cases'], country['deaths']))
+        (name, country['cases'], country['deaths']))
     
     conn.commit()
 
