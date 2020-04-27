@@ -1,0 +1,107 @@
+Country Name, Pollution 2019, Pollution 2020, Pollution Difference
+Afghanistan, 91.91, 93.45, -1.54
+Albania, 77.07, 77.77, -0.7
+Algeria, 64.69, 65.75, -1.06
+Argentina, 52.35, 50.67, 1.68
+Armenia, 61.55, 60.23, 1.32
+Australia, 23.97, 23.46, 0.51
+Austria, 21.97, 22.19, -0.22
+Azerbaijan, 78.32, 78.12, 0.2
+Bahrain, 73.33, 71.43, 1.9
+Bangladesh, 88.3, 86.21, 2.09
+Belarus, 40.97, 43.63, -2.66
+Belgium, 49.89, 52.94, -3.05
+Bosnia And Herzegovina, 63.47, 62.33, 1.14
+Brazil, 57.72, 54.98, 2.74
+Bulgaria, 63.98, 65.33, -1.35
+Cambodia, 80.03, 79.5, 0.53
+Canada, 27.85, 27.83, 0.02
+Chile, 65.54, 65.78, -0.24
+China, 81.91, 80.77, 1.14
+Colombia, 61.74, 62.83, -1.09
+Costa Rica, 50.21, 46.97, 3.24
+Croatia, 31.03, 30.46, 0.57
+Cyprus, 53.75, 53.55, 0.2
+Czech Republic, 40.96, 40.23, 0.73
+Denmark, 22.14, 21.33, 0.81
+Dominican Republic, 77.43, 77.9, -0.47
+Ecuador, 56.89, 57.0, -0.11
+Egypt, 86.48, 85.65, 0.83
+Estonia, 18.15, 19.81, -1.66
+Ethiopia, 80.44, 79.19, 1.25
+Finland, 11.93, 11.55, 0.38
+France, 42.7, 43.56, -0.86
+Georgia, 72.46, 71.09, 1.37
+Germany, 28.01, 29.03, -1.02
+Greece, 51.86, 52.55, -0.69
+Hong Kong, 66.39, 67.69, -1.3
+Hungary, 46.47, 48.29, -1.82
+Iceland, 15.24, 16.21, -0.97
+India, 75.81, 78.87, -3.06
+Indonesia, 62.78, 66.56, -3.78
+Iran, 79.35, 77.45, 1.9
+Iraq, 79.32, 78.83, 0.49
+Ireland, 31.12, 33.99, -2.87
+Israel, 57.25, 57.25, 0.0
+Italy, 53.75, 55.63, -1.88
+Jamaica, 71.13, 68.92, 2.21
+Japan, 37.08, 39.59, -2.51
+Jordan, 80.39, 77.78, 2.61
+Kazakhstan, 74.25, 75.15, -0.9
+Kenya, 72.96, 76.6, -3.64
+Kuwait, 71.6, 68.69, 2.91
+Latvia, 34.96, 33.73, 1.23
+Lebanon, 87.39, 88.37, -0.98
+Lithuania, 30.84, 28.8, 2.04
+Luxembourg, 22.61, 24.28, -1.67
+Malaysia, 63.74, 63.18, 0.56
+Malta, 73.75, 77.07, -3.32
+Mauritius, 58.48, 55.88, 2.6
+Mexico, 66.02, 66.1, -0.08
+Monaco, 84.74, 86.33, -1.59
+Mongolia, 93.06, 92.45, 0.61
+Montenegro, 45.23, 45.14, 0.09
+Morocco, 65.71, 70.64, -4.93
+Myanmar, 92.25, 92.54, -0.29
+Nepal, 84.98, 84.77, 0.21
+Netherlands, 27.45, 27.41, 0.04
+New Zealand, 22.74, 23.4, -0.66
+Nigeria, 87.37, 87.63, -0.26
+North Macedonia, 80.85, 80.23, 0.62
+Norway, 19.86, 20.35, -0.49
+Oman, 39.51, 37.74, 1.77
+Pakistan, 75.89, 74.25, 1.64
+Panama, 62.0, 63.09, -1.09
+Peru, 83.8, 84.13, -0.33
+Philippines, 74.47, 74.28, 0.19
+Poland, 52.38, 54.46, -2.08
+Portugal, 31.58, 30.89, 0.69
+Puerto Rico, 49.18, 49.93, -0.75
+Qatar, 66.48, 61.06, 5.42
+Romania, 55.39, 58.42, -3.03
+Russia, 62.8, 62.79, 0.01
+Saudi Arabia, 67.26, 65.09, 2.17
+Serbia, 58.86, 60.32, -1.46
+Singapore, 32.29, 33.48, -1.19
+Slovakia, 41.89, 39.66, 2.23
+Slovenia, 24.33, 24.06, 0.27
+South Africa, 56.95, 57.3, -0.35
+South Korea, 54.19, 62.48, -8.29
+Spain, 39.36, 39.99, -0.63
+Sri Lanka, 57.69, 59.14, -1.45
+Sweden, 18.01, 18.09, -0.08
+Switzerland, 22.03, 22.39, -0.36
+Taiwan, 63.47, 63.35, 0.12
+Tanzania, 64.5, 62.93, 1.57
+Thailand, 72.21, 75.07, -2.86
+Trinidad And Tobago, 66.96, 68.31, -1.35
+Tunisia, 68.16, 69.53, -1.37
+Turkey, 69.15, 67.35, 1.8
+Ukraine, 66.63, 65.08, 1.55
+United Arab Emirates, 53.11, 51.15, 1.96
+United Kingdom, 39.43, 40.56, -1.13
+United States, 33.95, 36.88, -2.93
+Uruguay, 46.63, 44.84, 1.79
+Venezuela, 73.88, 73.76, 0.12
+Vietnam, 87.13, 86.47, 0.66
+Zimbabwe, 70.99, 74.61, -3.62
