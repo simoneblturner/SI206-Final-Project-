@@ -245,8 +245,8 @@ def rate_cases_deaths():
         for x in data: 
             output.write(str(x) + "\n")  
 
-#difference_in_pollution()
-#cases_density()
-#cases_difference()
-#difference_density()
+difference_in_pollution()
+cases_density()
+cases_difference()
+difference_density()
 rate_cases_deaths()
